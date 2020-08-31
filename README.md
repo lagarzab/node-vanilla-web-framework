@@ -1,2 +1,2 @@
-# node-vanilla-web-framework
-A simple web framework built from standard node modules
+# vanilla-web-framework
+A simple nodejs web framework built from standard node modules
