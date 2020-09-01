@@ -4,21 +4,18 @@ function parse (url) {
         const char = url.charAt(i)
         if (char === ':') {
             let param = ''
-            let c = i+1
-            for (let j = c; j < url.length; j++) {
-                if (/\w/.test(url.charAt(j))) {
-                    param += url.charAt(j)
+            let c
+            for (c = i + 1; c < url.length; c++) {
+                if (/\w/.test(url.charAt(c))) {
+                    param += url.charAt(c)
                 } else {
-                    c = j
                     break
                 }
             }
             str += `(?<${param}>\\w+)`
-            i = c
-            console.log('a str=', str)
+            i = c - 1
         } else {
             str += char
-            console.log('b str=', str)
         }
     }
     return str
