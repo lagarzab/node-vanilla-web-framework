@@ -1,5 +1,6 @@
 const http = require('http')
 const parseRoute = require('./utils/url-regex')
+const parseQuery = require('./utils/query-regex')
 
 function server () {
     let routeTable = {}
@@ -10,8 +11,8 @@ function server () {
         // as well as, whether we have a matching method
         // if so, execute the callback in the route table object for that method of the matching path
         // else, return 404
-
-        let reqUrl = req.url
+        req.query = req.url.indexOf('?') > -1 ? parseQuery(req.url) : {}
+        let [ reqUrl ] = req.url.split('?')
         let reqMethod = req.method.toLowerCase()
         let routes = Object.keys(routeTable)
         for (let i = 0; i < routes.length; i++) {
@@ -19,7 +20,7 @@ function server () {
             let parsedRoute = parseRoute(route)
             if (new RegExp(parsedRoute).test(reqUrl) && !!routeTable[route][reqMethod]) {
                 foundRoute = true
-                req.params = req.url.match(new RegExp(parsedRoute)).groups
+                req.params = reqUrl.match(new RegExp(parsedRoute)).groups
                 routeTable[route][reqMethod](req, res)
                 /*
                 because we could potentially find routes with the same format, 
