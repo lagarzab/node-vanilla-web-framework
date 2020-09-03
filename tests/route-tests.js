@@ -4,6 +4,9 @@ assert('This route with one param to pass').test("/products/114", "/products/:id
 assert('This route with two params to fail on route with one param').test("/products/114/testName", "/products/:id").expect(false)
 assert('This route with two params should pass to a route expecting two params').test("/products/114/testName", "/products/:id/:name").expect(true)
 assert('This route does not match, it should fail').test("/products/114/testName/any", "/products/:id/:name/another").expect(false)
+assert('route with query string, should pass').test("/products/114?test=test", "/products/:id").expect(true)
+assert('bad route with query string, should fail').test("/products/114/categories?test=test", "/products/:id").expect(false)
+assert('bad route with query string, should fail').test("/products?test=test", "/products/:id").expect(false)
 
 function assert(assertion) {
     return {
@@ -23,6 +26,7 @@ function assert(assertion) {
         },
         test: function (route, routeFormat) {
             this.route = route
+            route = route.split('?')[0]
             this.routeFormat = routeFormat
             const format = '^' + routeFormat + '$'
             const regex = routeParser(format)
