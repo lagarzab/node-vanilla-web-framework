@@ -1,8 +1,11 @@
 const vanilla = require('./src/vanilla-web-server')
+const { nextTick } = require('process')
 const server = vanilla()
 const PORT = 3333
 
-server.get('/products/:id', (req, res) => res.end(`Testing the PRODUCTS/:ID route, I see. ${req.params.id}`))
+server.get('/products/:id',(req, res) => {
+    console.log('middleware', req)
+}, (req, res) => res.end(`Testing the PRODUCTS/:ID route, I see. ${req.params.id}`))
 server.get('/route1', (req, res) => res.end('You are on the GET route1'))
 server.get('/route2', (req, res) => res.end('There you are! route2 GET'))
 server.put('/route1', (req, res) => res.end('PUT something here on route1'))

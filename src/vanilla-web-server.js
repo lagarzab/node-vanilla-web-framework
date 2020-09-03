@@ -24,7 +24,11 @@ function server () {
                 foundRoute = true
                 req.params = reqUrl.match(new RegExp(parsedRoute)).groups
                 req.body = await getRequestBody(req)
+                
+                // this is probably not the best way to handle middleware... but it's working - will refactor another time.
+                if (routeTable[route][reqMethod + '-middleware']) routeTable[route][reqMethod + '-middleware'](req, res)
                 routeTable[route][reqMethod](req, res)
+
                 /*
                 because we could potentially find routes with the same format, 
                 we should allow all routes to be evaluated. Express does this same thing.
@@ -40,15 +44,19 @@ function server () {
 
     return {
         listen: (port, cb) => svr.listen(port, cb),
-        get: (path, cb) => addRoute(path, 'get', cb),
-        post: (path, cb) => addRoute(path, 'post', cb),
-        put: (path, cb) => addRoute(path, 'put', cb),
-        delete: (path, cb) => addRoute(path, 'delete', cb)
+        get: (path, func1, func2) => addRoute(path, 'get', func1, func2),
+        post: (path, func1, func2) => addRoute(path, 'post', func1, func2),
+        put: (path, func1, func2) => addRoute(path, 'put', func1, func2),
+        delete: (path, func1, func2) => addRoute(path, 'delete', func1, func2)
     }
 
-    function addRoute(path, method, cb) {
+    function addRoute(path, method, func1, func2) {
         if (!routeTable[path]) routeTable[path] = {}
-        routeTable[path][method] = cb
+        if (func2 === undefined) routeTable[path][method] = func1
+        else {
+            routeTable[path][method + '-middleware'] = func1
+            routeTable[path][method] = func2
+        }
     }
 
     function getRequestBody (req) {
