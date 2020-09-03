@@ -1,8 +1,8 @@
 # vanilla-web-framework
-A simple nodejs web framework built from standard node modules
+A simple nodejs web framework built from standard node modules and vanilla javascript.
 
 ## What we expect to get running
-- [] Routes
+- [x] Routes
 - [] Middleware
 - [] Query Parameters
 - [] Data in Body
