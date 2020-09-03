@@ -6,7 +6,7 @@ function server () {
     const svr = http.createServer((req, res) => {
         let foundRoute = false
 
-        // we have determine if the url received, is in our route table
+        // we have to determine if the url received, is in our route table
         // as well as, whether we have a matching method
         // if so, execute the callback in the route table object for that method of the matching path
         // else, return 404
@@ -19,6 +19,7 @@ function server () {
             let parsedRoute = parseRoute(route)
             if (new RegExp(parsedRoute).test(reqUrl) && !!routeTable[route][reqMethod]) {
                 foundRoute = true
+                req.params = req.url.match(new RegExp(parsedRoute)).groups
                 routeTable[route][reqMethod](req, res)
                 /*
                 because we could potentially find routes with the same format, 
