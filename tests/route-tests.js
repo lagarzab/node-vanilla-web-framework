@@ -14,7 +14,7 @@ function assert(assertion) {
         expect: function (expected) {
             const status = this.result === expected
             const msg = status ? 'Passed' : 'FAILED'
-            const color = status ? '\x1b[32m%s\x1b[0m' : '\x1b[47m\x1b[31m%s\x1b[0m'
+            const color = status ? '\x1b[32m%s\x1b[0m' : '\x1b[41m%s\x1b[0m'
             console.log('')
             console.log('\x1b[36m%s\x1b[0m', this.assert)
             console.log(`Expected: ${expected}`, `| Result: ${this.result}`)
