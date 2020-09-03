@@ -4,7 +4,7 @@ const parseQuery = require('./utils/query-regex')
 
 function server () {
     let routeTable = {}
-    const svr = http.createServer((req, res) => {
+    const svr = http.createServer(async (req, res) => {
         let foundRoute = false
 
         // we have to determine if the url received, is in our route table
@@ -21,6 +21,7 @@ function server () {
             if (new RegExp(parsedRoute).test(reqUrl) && !!routeTable[route][reqMethod]) {
                 foundRoute = true
                 req.params = reqUrl.match(new RegExp(parsedRoute)).groups
+                req.body = await getRequestBody(req)
                 routeTable[route][reqMethod](req, res)
                 /*
                 because we could potentially find routes with the same format, 
@@ -46,6 +47,15 @@ function server () {
     function addRoute(path, method, cb) {
         if (!routeTable[path]) routeTable[path] = {}
         routeTable[path][method] = cb
+    }
+
+    function getRequestBody (req) {
+        return new Promise ((resolve, reject) => {
+            let body = ''
+            req.on('data', chunk => body += chunk)
+            req.on('error', err => reject(err))
+            req.on('end', () => resolve(body))
+        })
     }
 }
 

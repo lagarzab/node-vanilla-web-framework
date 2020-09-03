@@ -5,7 +5,7 @@ A simple nodejs web framework built from standard node modules and vanilla javas
 - [x] Routes
 - [] Middleware
 - [x] Query Parameters
-- [] Data in Body
+- [x] Data in Body
 
 
 
