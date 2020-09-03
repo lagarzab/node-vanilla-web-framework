@@ -18,7 +18,7 @@ function parse (url) {
             str += char
         }
     }
-    return str
+    return `^${ str }$`
 }
 
 module.exports = parse
