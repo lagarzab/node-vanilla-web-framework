@@ -11,6 +11,8 @@ function server () {
         // as well as, whether we have a matching method
         // if so, execute the callback in the route table object for that method of the matching path
         // else, return 404
+
+        res = addResponseHelpers(res)
         req.query = req.url.indexOf('?') > -1 ? parseQuery(req.url) : {}
         let [ reqUrl ] = req.url.split('?')
         let reqMethod = req.method.toLowerCase()
@@ -56,6 +58,19 @@ function server () {
             req.on('error', err => reject(err))
             req.on('end', () => resolve(body))
         })
+    }
+
+    function addResponseHelpers (res) {
+        res.send = message => res.end(message)
+        res.json = message => {
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify(message))
+        }
+        res.html = message => {
+            res.setHeader('Content-Type', 'text/html')
+            res.end(message)
+        }
+        return res
     }
 }
 
