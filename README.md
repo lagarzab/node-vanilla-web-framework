@@ -62,5 +62,13 @@ server.listen(PORT, () => {
 })
 ```
 
+## Tests
+There are a couple of different test scripts created (`./tests`) for some initial testing of parameters and routes, in order to ensure that any changes that were being made when implementing support for additional features, that it didn't break anything in the process.
+
+These assertion tests were also created without a library and used a vanilla js approach. You can run these tests with:
+
+`node ./tests/all-tests.js`
+
+
 
 
